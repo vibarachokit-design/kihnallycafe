@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎰 Café Khinally - La Tragaperras del Mar</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #001f3f 0%, #003366 50%, #001a33 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            position: relative;
+            padding: 10px;
+        }
+        
+        /* Olas */
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+            background-size: 50% 100%;
+            animation: wave 8s linear infinite;
+        }
+        
+        .wave:nth-child(2) { bottom: 10px; opacity: 0.5; animation: wave 10s linear infinite reverse; }
+        .wave:nth-child(3) { bottom: 20px; opacity: 0.3; animation: wave 12s linear infinite; }
+        
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .bubble {
+            position: fixed;
+            bottom: -50px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+            border-radius: 50%;
+            animation: rise 6s infinite ease-in;
+            opacity: 0.4;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0.4; }
+            100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding-top: 10px;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ffd700;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 0px #003366, 0 0 15px rgba(255,215,0,0.5);
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            color: #87ceeb;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .happy-hour {
+            background: linear-gradient(90deg, #ff6b6b, #ffd700, #ff6b6b);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            color: #001f3f;
+            padding: 6px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 0.8em;
+            display: none;
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        
+        .happy-hour.active { display: block; }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* PREMIOS - AHORA ABAJO Y COMPACTO */
+        .prizes-board {
+            background: linear-gradient(145deg, #8B4513 0%, #A0522D 100%);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 10px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .prizes-board h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #ffd700;
+            font-size: 1em;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 0px #8B4513;
+        }
+        
+        .prize-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 8px;
+            margin: 3px 0;
+            background: rgba(0,31,63,0.6);
+            border-radius: 6px;
+            color: white;
+            font-size: 0.8em;
+        }
+        
+        .prize-row.grand-prize {
+            background: linear-gradient(90deg, rgba(255,215,0,0.3), rgba(255,107,107,0.3));
+            border: 1px solid #ffd700;
+            animation: pulse-border 2s infinite;
+        }
+        
+        @keyframes pulse-border {
+            0%, 100% { border-color: #ffd700; box-shadow: 0 0 3px #ffd700; }
+            50% { border-color: #ff6b6b; box-shadow: 0 0 8px #ff6b6b; }
+        }
+        
+        .prize-points { font-weight: bold; color: #4ecdc4; font-size: 0.9em; }
+        
+        /* Máquina */
+        .machine-container {
+            position: relative;
+            padding: 12px;
+            border-radius: 25px;
+            background: #000;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            transition: all 0.5s ease;
+        }
+        
+        .machine-container.blocked {
+            opacity: 0.3;
+            filter: grayscale(1) blur(2px);
+            pointer-events: none;
+        }
+        
+        .led-strip {
+            position: absolute;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+        
+        .led-strip.outer {
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 4px solid transparent;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+            background-size: 400% 100%;
+            animation: rainbow 3s linear infinite, blink 1s alternate infinite;
+            opacity: 0.8;
+        }
+        
+        .led-strip.inner {
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border: 3px solid transparent;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4, #ffd700);
+            background-size: 300% 100%;
+            animation: rainbow 2s linear infinite reverse;
+            opacity: 0.6;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; box-shadow: 0 0 20px rgba(255,215,0,0.8); }
+        }
+        
+        .led-strip.spinning {
+            animation: rainbow 0.5s linear infinite, blink 0.2s alternate infinite;
+            opacity: 1;
+        }
+        
+        .game-wrapper {
+            background: linear-gradient(145deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+            border-radius: 20px;
+            padding: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .machine-top {
+            background: linear-gradient(180deg, #CD853F 0%, #8B4513 100%);
+            border-radius: 15px 15px 0 0;
+            padding: 8px;
+            margin-bottom: 6px;
+            border: 2px solid #D2691E;
+        }
+        
+        .machine-title {
+            font-family: 'Fredoka One', cursive;
+            color: #ffd700;
+            font-size: 1.1em;
+            text-shadow: 2px 2px 0px #8B4513;
+        }
+        
+        .spins-counter {
+            background: rgba(0,31,63,0.9);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .spins-counter.active { display: flex; }
+        
+        .spins-label { font-size: 0.85em; color: #87ceeb; }
+        
+        .spins-number {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4em;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255,107,107,0.5);
+        }
+        
+        .spins-number.low {
+            color: #ff0000;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Bonus info */
+        .bonus-info {
+            background: linear-gradient(90deg, rgba(78,205,196,0.3), rgba(255,215,0,0.3));
+            border: 2px dashed #4ecdc4;
+            border-radius: 10px;
+            padding: 6px;
+            margin-bottom: 8px;
+            color: #4ecdc4;
+            font-size: 0.8em;
+            display: none;
+        }
+        
+        .bonus-info.active {
+            display: block;
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #4ecdc4; }
+            50% { box-shadow: 0 0 20px #ffd700; }
+        }
+        
+        canvas {
+            border-radius: 10px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 15px rgba(0,0,0,0.3);
+            background: #001a33;
+            border: 3px solid #D2691E;
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        
+        .controls {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .spin-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3em;
+            padding: 12px 30px;
+            background: linear-gradient(145deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #c92a2a, 0 8px 15px rgba(0,0,0,0.3);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #c92a2a, 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .spin-btn:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #c92a2a, 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .spin-btn:disabled {
+            background: linear-gradient(145deg, #666 0%, #555 100%);
+            box-shadow: 0 5px 0 #444;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .info-panel {
+            background: rgba(0,31,63,0.8);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: white;
+            min-width: 90px;
+        }
+        
+        .info-label { font-size: 0.7em; color: #87ceeb; text-transform: uppercase; }
+        
+        .info-value {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2em;
+            color: #ffd700;
+            text-shadow: 1px 1px 0px #003366;
+        }
+        
+        /* Pantalla de agradecimiento */
+        .thank-you-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #001f3f 0%, #003366 100%);
+            z-index: 2000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+        
+        .thank-you-screen.show { display: flex; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .thank-you-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .thank-you-title {
+            font-family: 'Fredoka One', cursive;
+            color: #ffd700;
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px #003366;
+        }
+        
+        .thank-you-text {
+            color: #87ceeb;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .thank-you-btn {
+            padding: 15px 40px;
+            background: linear-gradient(145deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #2d8a7c;
+            transition: all 0.3s;
+        }
+        
+        .thank-you-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #2d8a7c;
+        }
+        
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(145deg, #ffd700 0%, #ffed4e 100%);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+            text-align: center;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 4px solid #fff;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        .win-message.show { transform: translate(-50%, -50%) scale(1); }
+        
+        .win-message h2 {
+            font-family: 'Fredoka One', cursive;
+            color: #c92a2a;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+        
+        .win-message p { color: #8B4513; font-size: 1em; font-weight: bold; }
+        
+        .prize-icon-big {
+            font-size: 4em;
+            margin: 15px 0;
+            animation: bounce 1s infinite;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.1); }
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .overlay.show { opacity: 1; pointer-events: all; }
+        
+        /* Mensaje de espera QR */
+        .waiting-qr {
+            background: rgba(255,215,0,0.1);
+            border: 2px dashed #ffd700;
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin-bottom: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .waiting-qr-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            animation: pulse-icon 2s infinite;
+        }
+        
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .waiting-qr h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .admin-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+        }
+        
+        .admin-btn {
+            background: rgba(0,0,0,0.6);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8em;
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        .password-modal, .admin-modal, .qr-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #003366;
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .password-modal.show, .admin-modal.show, .qr-modal.show { display: block; }
+        
+        .password-modal h3, .admin-modal h3, .qr-modal h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3em;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            background: rgba(0,31,63,0.8);
+            color: #ffd700;
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .password-error {
+            color: #ff6b6b;
+            font-size: 0.85em;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .qr-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        #qrcode {
+            margin: 0 auto;
+            display: inline-block;
+        }
+        
+        .qr-code-text {
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            color: #001f3f;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .ticket-list {
+            text-align: left;
+            color: white;
+            font-size: 0.85em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .ticket-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .generate-ticket-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 4px 0 #2d8a7c;
+        }
+        
+        .print-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 4px 0 #c92a2a;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(145deg, #ff6b6b 0%, #ffd700 100%);
+            color: #001f3f;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 3000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            max-width: 90%;
+        }
+        
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .sound-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: 2px solid #ffd700;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 50;
+            font-size: 1em;
+        }
+
+        .close-win {
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #c92a2a;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #8b0000;
+            width: 100%;
+        }
+
+        /* Input manual de código */
+        .manual-code-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,215,0,0.3);
+        }
+        
+        .manual-code-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2em;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            background: rgba(0,31,63,0.8);
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .manual-code-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffd700;
+            color: #001f3f;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        /* NUEVO: Botón de WhatsApp en modal de victoria */
+        .whatsapp-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: linear-gradient(145deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 4px 0 #075E54;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .whatsapp-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #075E54;
+        }
+
+        /* NUEVO: Configuración de WhatsApp en Admin */
+        .whatsapp-config {
+            background: rgba(37, 211, 102, 0.1);
+            border: 2px solid #25D366;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: white;
+        }
+        
+        .whatsapp-config h4 {
+            color: #25D366;
+            margin-bottom: 10px;
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        .whatsapp-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #25D366;
+            border-radius: 8px;
+            background: rgba(0,31,63,0.8);
+            color: white;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        
+        .whatsapp-save-btn {
+            width: 100%;
+            padding: 10px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 400px) {
+            h1 { font-size: 1.5em; }
+            .machine-title { font-size: 1em; }
+            .spin-btn { font-size: 1.1em; padding: 10px 20px; }
+            .prize-row { font-size: 0.75em; padding: 4px 6px; }
+            .thank-you-title { font-size: 1.5em; }
+            .prizes-board { padding: 8px; }
+            .prizes-board h3 { font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Olas -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- Burbujas -->
+    <div class="bubble" style="left: 10%; width: 30px; height: 30px; animation-delay: 0s; animation-duration: 7s;"></div>
+    <div class="bubble" style="left: 30%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 5s;"></div>
+    <div class="bubble" style="left: 50%; width: 35px; height: 35px; animation-delay: 4s; animation-duration: 8s;"></div>
+    <div class="bubble" style="left: 70%; width: 25px; height: 25px; animation-delay: 1s; animation-duration: 6s;"></div>
+    <div class="bubble" style="left: 90%; width: 30px; height: 30px; animation-delay: 3s; animation-duration: 7s;"></div>
+
+    <!-- Notificación -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Admin -->
+    <div class="admin-panel">
+        <button class="admin-btn" onclick="showPasswordModal()">🔐 Admin</button>
+    </div>
+
+    <!-- Modal Contraseña -->
+    <div class="overlay" id="passwordOverlay" onclick="closePasswordModal()"></div>
+    <div class="password-modal" id="passwordModal">
+        <h3>🔐 Acceso Admin</h3>
+        <input type="password" class="password-input" id="passwordInput" placeholder="Contraseña" maxlength="20">
+        <button class="validate-btn" onclick="checkPassword()" style="width: 100%;">Ingresar</button>
+        <div class="password-error" id="passwordError">Contraseña incorrecta</div>
+    </div>
+
+    <!-- Modal Admin -->
+    <div class="overlay" id="adminOverlay" onclick="closeAdminModal()"></div>
+    <div class="admin-modal" id="adminModal">
+        <h3>⚙️ Panel Admin</h3>
+        <p style="color: #87ceeb; margin-bottom: 10px; font-size: 0.85em;">
+            Mínimo: $5,000 | 10 giros | Cada 5 tickets = 1 giro extra
+        </p>
+        <div style="margin-bottom: 10px;">
+            <input type="number" id="purchaseAmount" placeholder="Monto" min="5000" 
+                   style="width: 100%; padding: 10px; border-radius: 5px; border: 2px solid #ffd700; font-size: 1em; margin-bottom: 8px;">
+            <input type="text" id="customerName" placeholder="Cliente" 
+                   style="width: 100%; padding: 10px; border-radius: 5px; border: 2px solid #ffd700; font-size: 1em;">
+        </div>
+        <button class="generate-ticket-btn" onclick="generateTicket()">🎫 Generar QR</button>
+        
+        <!-- NUEVO: Configuración de WhatsApp -->
+        <div class="whatsapp-config">
+            <h4>📱 Notificación WhatsApp</h4>
+            <p style="font-size: 0.8em; margin-bottom: 8px; color: #87ceeb;">
+                Número para notificar premios (con código de país, ej: 573001234567)
+            </p>
+            <input type="tel" class="whatsapp-input" id="whatsappNumber" placeholder="573001234567"
+                   value="">
+            <button class="whatsapp-save-btn" onclick="saveWhatsAppNumber()">💾 Guardar Número</button>
+            <p style="font-size: 0.75em; margin-top: 8px; color: #aaa;" id="savedWhatsAppStatus">
+                Sin número configurado
+            </p>
+        </div>
+        
+        <h3 style="margin-top: 15px; color: #ffd700; font-size: 1.1em;">Tickets Hoy</h3>
+        <div class="ticket-list" id="ticketList"></div>
+        <button class="close-win" onclick="closeAdminModal()">Cerrar</button>
+    </div>
+
+    <!-- Modal QR -->
+    <div class="overlay" id="qrOverlay" onclick="closeQrModal()"></div>
+    <div class="qr-modal" id="qrModal">
+        <h3>🎫 Ticket Generado</h3>
+        <div class="qr-display">
+            <div id="qrcode"></div>
+            <div class="qr-code-text" id="qrCodeText"></div>
+        </div>
+        <p style="color: #87ceeb; font-size: 0.9em; margin: 10px 0;">
+            Escanea con la cámara del celular<br>
+            ¡Listo para jugar inmediatamente!
+        </p>
+        <button class="print-btn" onclick="printTicket()">🖨️ Imprimir</button>
+        <button class="close-win" onclick="closeQrModal()">Cerrar</button>
+    </div>
+
+    <!-- Sonido -->
+    <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊</button>
+
+    <div class="container">
+        <h1>☕ Café Khinally 🌊</h1>
+        <p class="subtitle">¡Gira y gana premios reales!</p>
+        
+        <!-- Banner Hora Feliz -->
+        <div class="happy-hour" id="happyHourBanner">
+            🌟 ¡HORA FELIZ MARINA! 🌟<br>
+            5:00 PM - 7:00 PM<br>
+            ¡Doble probabilidad de ganar!
+        </div>
+        
+        <!-- Esperando QR (modo inicial) -->
+        <div class="waiting-qr" id="waitingQr">
+            <div class="waiting-qr-icon">📱</div>
+            <h3>Escanea tu Ticket QR</h3>
+            <p>Usa la cámara de tu celular<br>para escanear el código QR<br>y comenzar a jugar</p>
+            
+            <!-- Entrada manual de código -->
+            <div class="manual-code-section" id="manualCodeSection">
+                <p style="color: #87ceeb; font-size: 0.9em; margin-bottom: 10px;">
+                    ¿Problemas con el QR? Ingresa el código manual:
+                </p>
+                <input type="text" class="manual-code-input" id="manualCodeInput" 
+                       placeholder="ABC-1234" maxlength="8">
+                <button class="manual-code-btn" onclick="activateManualCode()">
+                    🎮 JUGAR
+                </button>
+            </div>
+        </div>
+
+        <!-- Máquina (AHORA ARRIBA) -->
+        <div class="machine-container" id="machineContainer" style="display: none;">
+            <div class="led-strip outer" id="ledOuter"></div>
+            <div class="led-strip inner" id="ledInner"></div>
+            
+            <div class="game-wrapper">
+                <div class="machine-top">
+                    <div class="machine-title">🎰 La Traga-Marina 🎰</div>
+                </div>
+                
+                <!-- Info de bonus -->
+                <div class="bonus-info" id="bonusInfo">
+                    🎁 ¡GIRO EXTRA DE FIDELIDAD! 🎁<br>
+                    Has acumulado 5 tickets
+                </div>
+                
+                <div class="spins-counter" id="spinsCounter">
+                    <span class="spins-label">🎰 Giros:</span>
+                    <span class="spins-number" id="spinsNumber">10</span>
+                </div>
+                
+                <canvas id="slotCanvas" width="350" height="250"></canvas>
+                
+                <div class="controls">
+                    <button class="spin-btn" id="spinBtn" onclick="spin()" disabled>GIRAR</button>
+                    <div class="info-panel">
+                        <div class="info-label">Pizzas</div>
+                        <div class="info-value" id="winCount">0 🍕</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA DE PREMIOS - AHORA ABAJO Y COMPACTA -->
+        <div class="prizes-board" id="prizesBoard" style="display: none;">
+            <h3>🏆 Tabla de Premios</h3>
+            <div class="prize-row grand-prize">
+                <span>💎💎💎 3 TESOROS</span>
+                <span class="prize-points">🍕 PIZZA</span>
+            </div>
+            <div class="prize-row" style="border: 2px solid #8B4513;">
+                <span>☕☕☕ 3 CAFÉS</span>
+                <span class="prize-points">☕ CAFÉ</span>
+            </div>
+            <div class="prize-row">
+                <span>⚓⚓⚓ 3 ANCLAS</span>
+                <span class="prize-points">🍰 POSTRE</span>
+            </div>
+            <div class="prize-row">
+                <span>🐚🐚🐚 3 CONCHAS</span>
+                <span class="prize-points">🥤 BEBIDA</span>
+            </div>
+            <div class="prize-row" style="background: rgba(78,205,196,0.2);">
+                <span>🐟🐟🐟 3 PECES</span>
+                <span class="prize-points">🔑 LLAVERO</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Victoria - AHORA CON BOTÓN WHATSAPP -->
+    <div class="overlay" id="overlay"></div>
+    <div class="win-message" id="winMessage">
+        <div class="prize-icon-big" id="winIcon">💎</div>
+        <h2 id="winTitle">¡PREMIO!</h2>
+        <p id="winText">¡Felicidades!</p>
+        <div style="margin-top: 10px; padding: 8px; background: rgba(255,255,255,0.3); border-radius: 8px; font-size: 0.85em;">
+            Ticket: <span id="winningTicket"></span>
+        </div>
+        
+        <!-- NUEVO: Botón para notificar por WhatsApp -->
+        <a href="#" class="whatsapp-btn" id="whatsappNotifyBtn" onclick="sendWhatsAppNotification(event)" style="display: none;">
+            📱 Notificar al Local
+        </a>
+        
+        <button class="close-win" onclick="closeWin()">¡Genial! 🎉</button>
+    </div>
+
+    <!-- Pantalla de Agradecimiento -->
+    <div class="thank-you-screen" id="thankYouScreen">
+        <div class="thank-you-icon">☕🌊🎰</div>
+        <div class="thank-you-title">¡Gracias por visitarnos!</div>
+        <div class="thank-you-text">
+            Gracias por preferir Café Khinally<br>
+            Esperamos verte pronto<br>
+            <span style="color: #ffd700; font-size: 1.3em;">¡Sigue intentando!</span>
+        </div>
+        <button class="thank-you-btn" onclick="resetToQrMode()">🎰 Nuevo Juego</button>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN
+        const ADMIN_PASSWORD = 'khinally2024';
+        const SPINS_PER_TICKET = 10;
+        const MIN_PURCHASE = 5000;
+        const HAPPY_HOUR_START = 17;
+        const HAPPY_HOUR_END = 19;
+        const BONUS_EVERY = 5;
+        
+        // NUEVO: Cargar número de WhatsApp guardado
+        let ownerWhatsApp = localStorage.getItem('khinallyWhatsApp') || '';
+        
+        // Probabilidades
+        const BASE_PROBABILITIES = {
+            '💎': 3, '☕': 8, '⚓': 12, '🐚': 15, '🐟': 20, 'other': 42
+        };
+        
+        function getCurrentProbabilities() {
+            const hour = new Date().getHours();
+            const isHappyHour = hour >= HAPPY_HOUR_START && hour < HAPPY_HOUR_END;
+            
+            if (isHappyHour) {
+                return { '💎': 6, '☕': 16, '⚓': 24, '🐚': 30, '🐟': 24, 'other': 0 };
+            }
+            return BASE_PROBABILITIES;
+        }
+        
+        function checkHappyHour() {
+            const hour = new Date().getHours();
+            if (hour >= HAPPY_HOUR_START && hour < HAPPY_HOUR_END) {
+                document.getElementById('happyHourBanner').classList.add('active');
+            }
+        }
+        checkHappyHour();
+        
+        // Audio
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+        let soundEnabled = true;
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            switch(type) {
+                case 'spin':
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                    break;
+                case 'stop':
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                    break;
+                case 'win':
+                    [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.frequency.value = freq;
+                        g.gain.setValueAtTime(0.4, audioCtx.currentTime + i * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.08 + 0.4);
+                        o.start(audioCtx.currentTime + i * 0.08);
+                        o.stop(audioCtx.currentTime + i * 0.08 + 0.4);
+                    });
+                    break;
+                case 'error':
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.type = 'sawtooth';
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                    break;
+                case 'validate':
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                    break;
+            }
+        }
+
+        // Sistema de Tickets
+        let customerHistory = JSON.parse(localStorage.getItem('khinallyHistory')) || {};
+        let currentTicket = null;
+        let remainingSpins = 0;
+        let pizzaCount = parseInt(localStorage.getItem('khinallyPizzas')) || 0;
+        let isBonusSpin = false;
+        let currentPrize = null; // NUEVO: Guardar premio actual para WhatsApp
+        
+        document.getElementById('winCount').textContent = pizzaCount + ' 🍕';
+        let usedTickets = JSON.parse(localStorage.getItem('khinallyUsedTickets')) || {};
+
+        function showPasswordModal() {
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordOverlay').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('passwordInput').focus();
+            
+            // Cargar número guardado en el input
+            const savedNumber = localStorage.getItem('khinallyWhatsApp') || '';
+            document.getElementById('whatsappNumber').value = savedNumber;
+            updateWhatsAppStatus(savedNumber);
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordOverlay').classList.remove('show');
+        }
+
+        function checkPassword() {
+            if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
+                closePasswordModal();
+                showAdminModal();
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+                playSound('error');
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function showAdminModal() {
+            document.getElementById('adminModal').classList.add('show');
+            document.getElementById('adminOverlay').classList.add('show');
+            updateTicketList();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('show');
+            document.getElementById('adminOverlay').classList.remove('show');
+        }
+
+        // NUEVO: Funciones para configurar WhatsApp
+        function saveWhatsAppNumber() {
+            const number = document.getElementById('whatsappNumber').value.trim();
+            
+            // Validar que solo contenga números
+            if (!/^\d+$/.test(number)) {
+                alert('Por favor ingresa solo números, sin espacios ni signos');
+                return;
+            }
+            
+            // Validar longitud mínima (código país + número)
+            if (number.length < 10) {
+                alert('Número demasiado corto. Incluye código de país (ej: 57 para Colombia)');
+                return;
+            }
+            
+            localStorage.setItem('khinallyWhatsApp', number);
+            ownerWhatsApp = number;
+            updateWhatsAppStatus(number);
+            playSound('validate');
+            alert('✅ Número guardado correctamente');
+        }
+
+        function updateWhatsAppStatus(number) {
+            const statusEl = document.getElementById('savedWhatsAppStatus');
+            if (number) {
+                const masked = number.substring(0, 3) + '****' + number.substring(number.length - 3);
+                statusEl.textContent = `Configurado: ${masked}`;
+                statusEl.style.color = '#25D366';
+            } else {
+                statusEl.textContent = 'Sin número configurado';
+                statusEl.style.color = '#aaa';
+            }
+        }
+
+        function encodeTicketData(ticketData) {
+            const dataString = [
+                ticketData.code,
+                ticketData.name,
+                ticketData.amount,
+                ticketData.totalSpins,
+                new Date(ticketData.created).getTime(),
+                ticketData.hasBonus ? '1' : '0'
+            ].join('|');
+            
+            return btoa(dataString).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+
+        function decodeTicketData(encoded) {
+            try {
+                let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                while (base64.length % 4) base64 += '=';
+                
+                const decoded = atob(base64);
+                const parts = decoded.split('|');
+                
+                if (parts.length !== 6) return null;
+                
+                const created = new Date(parseInt(parts[4]));
+                const now = new Date();
+                const hoursDiff = (now - created) / (1000 * 60 * 60);
+                
+                if (hoursDiff > 24) return { expired: true };
+                
+                return {
+                    code: parts[0],
+                    name: parts[1],
+                    amount: parseInt(parts[2]),
+                    totalSpins: parseInt(parts[3]),
+                    spinsLeft: parseInt(parts[3]),
+                    created: created.toISOString(),
+                    hasBonus: parts[5] === '1',
+                    used: false,
+                    prizes: []
+                };
+            } catch (e) {
+                console.error('Error decodificando ticket:', e);
+                return null;
+            }
+        }
+
+        function generateTicket() {
+            const amount = parseInt(document.getElementById('purchaseAmount').value) || 0;
+            const name = document.getElementById('customerName').value.trim() || 'Cliente';
+            
+            if (amount < MIN_PURCHASE) {
+                alert(`Mínimo $${MIN_PURCHASE.toLocaleString()} COP`);
+                playSound('error');
+                return;
+            }
+            
+            const history = customerHistory[name] || { count: 0, lastBonus: null };
+            history.count++;
+            
+            let bonusMessage = '';
+            let isFirstBonus = false;
+            
+            if (history.count % BONUS_EVERY === 0) {
+                isFirstBonus = true;
+                bonusMessage = `\n\n🎁 ¡BONUS! Cliente frecuente\nGiro extra incluido (11 total)`;
+            }
+            
+            customerHistory[name] = history;
+            localStorage.setItem('khinallyHistory', JSON.stringify(customerHistory));
+            
+            const code = generateUniqueCode();
+            const spins = isFirstBonus ? SPINS_PER_TICKET + 1 : SPINS_PER_TICKET;
+            
+            const ticketData = {
+                code: code,
+                amount: amount,
+                name: name,
+                spinsLeft: spins,
+                totalSpins: spins,
+                created: new Date().toISOString(),
+                used: false,
+                prizes: [],
+                hasBonus: isFirstBonus
+            };
+            
+            let adminTickets = JSON.parse(localStorage.getItem('khinallyAdminTickets')) || {};
+            adminTickets[code] = ticketData;
+            localStorage.setItem('khinallyAdminTickets', JSON.stringify(adminTickets));
+            
+            showQrModal(ticketData, bonusMessage);
+            updateTicketList();
+            playSound('validate');
+            
+            document.getElementById('purchaseAmount').value = '';
+            document.getElementById('customerName').value = '';
+        }
+
+        function generateUniqueCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+            const nums = '23456789';
+            let code;
+            let attempts = 0;
+            
+            do {
+                code = '';
+                for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
+                code += '-';
+                for (let i = 0; i < 4; i++) code += nums[Math.floor(Math.random() * nums.length)];
+                attempts++;
+            } while (attempts < 100);
+            
+            return code;
+        }
+
+        function showQrModal(ticketData, bonusMsg = '') {
+            document.getElementById('qrModal').classList.add('show');
+            document.getElementById('qrOverlay').classList.add('show');
+            
+            const encodedData = encodeTicketData(ticketData);
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const qrUrl = `${baseUrl}?t=${encodedData}`;
+            
+            document.getElementById('qrcode').innerHTML = '';
+            
+            new QRCode(document.getElementById('qrcode'), {
+                text: qrUrl,
+                width: 200,
+                height: 200,
+                colorDark: '#001f3f',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            document.getElementById('qrCodeText').textContent = ticketData.code;
+            
+            if (bonusMsg) {
+                setTimeout(() => alert(bonusMsg), 100);
+            }
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.remove('show');
+            document.getElementById('qrOverlay').classList.remove('show');
+        }
+
+        function printTicket() {
+            const code = document.getElementById('qrCodeText').textContent;
+            const adminTickets = JSON.parse(localStorage.getItem('khinallyAdminTickets')) || {};
+            const ticket = adminTickets[code];
+            
+            if (!ticket) return;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Ticket Café Khinally</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+                        .ticket { border: 3px solid #ffd700; border-radius: 15px; padding: 20px; max-width: 300px; margin: 0 auto; background: linear-gradient(180deg, #001f3f, #003366); color: white; }
+                        h1 { color: #ffd700; margin: 10px 0; font-size: 24px; }
+                        .qr { margin: 15px 0; }
+                        .code { font-size: 28px; font-weight: bold; color: #4ecdc4; letter-spacing: 3px; margin: 10px 0; }
+                        .info { margin: 10px 0; font-size: 14px; }
+                        .bonus { background: #ff6b6b; color: white; padding: 5px 10px; border-radius: 10px; display: inline-block; margin: 10px 0; font-weight: bold; }
+                        .prizes { text-align: left; font-size: 12px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #ffd700; }
+                        .instructions { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 13px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="ticket">
+                        <h1>☕ Café Khinally 🌊</h1>
+                        <div class="qr">${document.getElementById('qrcode').innerHTML}</div>
+                        <div class="code">${code}</div>
+                        ${ticket.hasBonus ? '<div class="bonus">🎁 ¡GIRO EXTRA!</div>' : ''}
+                        <div class="info">
+                            <strong>Cliente:</strong> ${ticket.name}<br>
+                            <strong>Monto:</strong> $${ticket.amount.toLocaleString()}<br>
+                            <strong>Giros:</strong> ${ticket.totalSpins}<br>
+                            <strong>Válido hasta:</strong> ${new Date(new Date(ticket.created).getTime() + 24*60*60*1000).toLocaleString()}
+                        </div>
+                        <div class="instructions">
+                            📱 <strong>Instrucciones:</strong><br>
+                            1. Abre tu cámara<br>
+                            2. Escanea el código QR<br>
+                            3. ¡Juega inmediatamente!
+                        </div>
+                        <div class="prizes">
+                            <strong>🏆 Premios:</strong><br>
+                            💎💎💎 = Pizza gratis<br>
+                            ☕☕☕ = Café gratis<br>
+                            ⚓⚓⚓ = Postre gratis<br>
+                            🐚🐚🐚 = Bebida gratis<br>
+                            🐟🐟🐟 = Llavero
+                        </div>
+                    </div>
+                    <script>window.onload = () => { setTimeout(() => window.print(), 500); }<\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function updateTicketList() {
+            const list = document.getElementById('ticketList');
+            const today = new Date().toDateString();
+            const adminTickets = JSON.parse(localStorage.getItem('khinallyAdminTickets')) || {};
+            
+            const todayTickets = Object.values(adminTickets).filter(t => 
+                new Date(t.created).toDateString() === today
+            ).sort((a, b) => new Date(b.created) - new Date(a.created));
+            
+            if (todayTickets.length === 0) {
+                list.innerHTML = '<p style="color: #87ceeb; text-align: center;">Sin tickets hoy</p>';
+                return;
+            }
+            
+            list.innerHTML = todayTickets.map(t => {
+                const prizes = t.prizes || [];
+                const hasPizza = prizes.some(p => p.type === 'pizza');
+                return `
+                <div class="ticket-item" style="${t.spinsLeft === 0 ? 'opacity: 0.5;' : ''}">
+                    <div>
+                        <strong style="color: ${hasPizza ? '#ffd700' : 'white'}">${t.code}</strong>
+                        <small style="display: block; color: #87ceeb;">
+                            ${t.name} - ${t.totalSpins}🎰 ${t.hasBonus ? '(+1 bonus)' : ''}
+                        </small>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function notifyAdmin(message, isPizza = false) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.style.background = isPizza 
+                ? 'linear-gradient(145deg, #ff0000 0%, #ffd700 100%)'
+                : 'linear-gradient(145deg, #4ecdc4 0%, #44a08d 100%)';
+            notif.classList.add('show');
+            
+            if (navigator.vibrate && isPizza) {
+                navigator.vibrate([200, 100, 200, 100, 400]);
+            }
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 5000);
+        }
+
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedTicket = urlParams.get('t');
+            
+            if (encodedTicket) {
+                const ticketData = decodeTicketData(encodedTicket);
+                
+                if (!ticketData) {
+                    alert('❌ Ticket no válido');
+                    return;
+                }
+                
+                if (ticketData.expired) {
+                    alert('⏰ Ticket expirado (más de 24h)');
+                    return;
+                }
+                
+                activateTicket(ticketData);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+        function activateManualCode() {
+            const input = document.getElementById('manualCodeInput');
+            const code = input.value.trim().toUpperCase();
+            
+            if (!code || code.length < 8) {
+                alert('Ingresa un código válido (ej: ABC-1234)');
+                return;
+            }
+            
+            const adminTickets = JSON.parse(localStorage.getItem('khinallyAdminTickets')) || {};
+            const ticketData = adminTickets[code];
+            
+            if (!ticketData) {
+                alert('❌ Código no encontrado. Verifica con la caja.');
+                return;
+            }
+            
+            if (usedTickets[code]) {
+                alert('⚠️ Este ticket ya fue utilizado en este dispositivo');
+                return;
+            }
+            
+            const hours = (new Date() - new Date(ticketData.created)) / (1000 * 60 * 60);
+            if (hours > 24) {
+                alert('⏰ Ticket expirado (más de 24h)');
+                return;
+            }
+            
+            activateTicket(ticketData);
+            input.value = '';
+        }
+
+        document.getElementById('manualCodeInput')?.addEventListener('keypress', e => {
+            if (e.key === 'Enter') activateManualCode();
+        });
+
+        function activateTicket(ticketData) {
+            if (usedTickets[ticketData.code]) {
+                alert('⚠️ Este ticket ya fue utilizado en este dispositivo');
+                return;
+            }
+            
+            usedTickets[ticketData.code] = {
+                usedAt: new Date().toISOString(),
+                spinsLeft: ticketData.spinsLeft
+            };
+            localStorage.setItem('khinallyUsedTickets', JSON.stringify(usedTickets));
+            
+            currentTicket = ticketData.code;
+            remainingSpins = ticketData.spinsLeft || ticketData.totalSpins;
+            isBonusSpin = ticketData.hasBonus && remainingSpins > SPINS_PER_TICKET;
+            
+            document.getElementById('waitingQr').style.display = 'none';
+            document.getElementById('machineContainer').style.display = 'block';
+            document.getElementById('prizesBoard').style.display = 'block';
+            document.getElementById('spinsCounter').classList.add('active');
+            updateSpinsDisplay();
+            
+            if (isBonusSpin) {
+                document.getElementById('bonusInfo').classList.add('active');
+            }
+            
+            document.getElementById('spinBtn').disabled = false;
+            
+            playSound('validate');
+            
+            const hour = new Date().getHours();
+            const isHappy = hour >= HAPPY_HOUR_START && hour < HAPPY_HOUR_END;
+            showMessage(`¡Bienvenido ${ticketData.name}!${isHappy ? ' 🌟 HORA FELIZ' : ''}`);
+        }
+
+        function updateSpinsDisplay() {
+            const el = document.getElementById('spinsNumber');
+            el.textContent = remainingSpins;
+            el.className = remainingSpins <= 3 ? 'spins-number low' : 'spins-number';
+        }
+
+        // JUEGO
+        const canvas = document.getElementById('slotCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const WEIGHTED_SYMBOLS = [
+            ...Array(3).fill('💎'), ...Array(8).fill('☕'),
+            ...Array(12).fill('⚓'), ...Array(15).fill('🐚'),
+            ...Array(20).fill('🐟'), ...Array(20).fill('🦀'),
+            ...Array(22).fill('⭐')
+        ];
+        
+        const reels = [
+            { symbols: [], offset: 0, isSpinning: false, shouldStop: false },
+            { symbols: [], offset: 0, isSpinning: false, shouldStop: false },
+            { symbols: [], offset: 0, isSpinning: false, shouldStop: false }
+        ];
+        
+        const REEL_WIDTH = 116;
+        const SYMBOL_SIZE = 70;
+        const SYMBOL_SPACING = 83;
+        const CENTER_Y = canvas.height / 2;
+        let isSpinning = false;
+
+        function initReels() {
+            reels.forEach(reel => {
+                reel.symbols = [];
+                for (let i = 0; i < 5; i++) {
+                    reel.symbols.push(getRandomSymbol());
+                }
+                reel.offset = 0;
+                reel.isSpinning = false;
+            });
+        }
+
+        function getRandomSymbol() {
+            return WEIGHTED_SYMBOLS[Math.floor(Math.random() * WEIGHTED_SYMBOLS.length)];
+        }
+
+        function drawSymbol(symbol, x, y, size, alpha = 1) {
+            ctx.save();
+            
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, size/2);
+            grad.addColorStop(0, `rgba(255,255,255,${0.25 * alpha})`);
+            grad.addColorStop(0.7, `rgba(255,255,255,${0.1 * alpha})`);
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, size/2 - 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.font = `${size * 0.6}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha = alpha;
+            
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            
+            ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+            ctx.lineWidth = 2;
+            ctx.strokeText(symbol, x, y);
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(symbol, x, y);
+            
+            ctx.restore();
+        }
+
+        function drawFrame() {
+            const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bg.addColorStop(0, '#001a33');
+            bg.addColorStop(0.5, '#003366');
+            bg.addColorStop(1, '#001a33');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = 'rgba(255,215,0,0.15)';
+            ctx.lineWidth = 2;
+            for (let i = 1; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * REEL_WIDTH + 15, 10);
+                ctx.lineTo(i * REEL_WIDTH + 15, canvas.height - 10);
+                ctx.stroke();
+            }
+            
+            ctx.strokeStyle = 'rgba(255,0,0,0.4)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(10, CENTER_Y);
+            ctx.lineTo(canvas.width - 10, CENTER_Y);
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function render() {
+            drawFrame();
+            
+            reels.forEach((reel, i) => {
+                const x = i * REEL_WIDTH + REEL_WIDTH/2 + 15;
+                reel.symbols.forEach((sym, j) => {
+                    const baseY = CENTER_Y + (j - 2) * SYMBOL_SPACING;
+                    const y = baseY + reel.offset;
+                    
+                    if (y > -SYMBOL_SPACING && y < canvas.height + SYMBOL_SPACING) {
+                        const dist = Math.abs(y - CENTER_Y);
+                        const scale = Math.max(0.5, 1 - dist / 200);
+                        const alpha = Math.max(0.3, 1 - dist / 150);
+                        drawSymbol(sym, x, y, SYMBOL_SIZE * scale, alpha);
+                    }
+                });
+            });
+            
+            if (!isSpinning) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(255,215,0,0.9)';
+                ctx.lineWidth = 4;
+                ctx.setLineDash([12, 8]);
+                ctx.lineDashOffset = -Date.now() / 20;
+                ctx.shadowColor = '#ffd700';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.moveTo(15, CENTER_Y);
+                ctx.lineTo(canvas.width - 15, CENTER_Y);
+                ctx.stroke();
+                
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#ffd700';
+                ctx.fillText('▶', 5, CENTER_Y + 7);
+                ctx.fillText('◀', canvas.width - 15, CENTER_Y + 7);
+                ctx.restore();
+            }
+        }
+
+        function animateReel(i) {
+            const reel = reels[i];
+            if (!reel.isSpinning) return;
+            
+            reel.offset += 25;
+            if (Math.random() < 0.03) playSound('spin');
+            
+            if (reel.offset >= SYMBOL_SPACING) {
+                reel.symbols.unshift(getRandomSymbol());
+                if (reel.symbols.length > 8) reel.symbols.pop();
+                reel.offset = 0;
+            }
+            
+            if (reel.shouldStop && reel.offset > SYMBOL_SPACING * 0.6) {
+                reel.isSpinning = false;
+                reel.offset = 0;
+                reel.shouldStop = false;
+                playSound('stop');
+                checkAllStopped();
+            }
+            
+            if (reel.isSpinning) requestAnimationFrame(() => animateReel(i));
+        }
+
+        function spin() {
+            if (isSpinning || remainingSpins <= 0 || !currentTicket) return;
+            
+            isSpinning = true;
+            remainingSpins--;
+            updateSpinsDisplay();
+            
+            if (usedTickets[currentTicket]) {
+                usedTickets[currentTicket].spinsLeft = remainingSpins;
+                localStorage.setItem('khinallyUsedTickets', JSON.stringify(usedTickets));
+            }
+            
+            document.getElementById('spinBtn').disabled = true;
+            playSound('spin');
+            
+            document.getElementById('ledOuter').classList.add('spinning');
+            document.getElementById('ledInner').classList.add('spinning');
+            
+            reels.forEach((reel, i) => {
+                reel.isSpinning = true;
+                reel.shouldStop = false;
+                reel.offset = 0;
+                reel.symbols = [];
+                for (let j = 0; j < 8; j++) reel.symbols.push(getRandomSymbol());
+                
+                animateReel(i);
+                setTimeout(() => reel.shouldStop = true, 1800 + i * 500);
+            });
+            
+            renderLoop();
+        }
+
+        function renderLoop() {
+            if (isSpinning || reels.some(r => r.isSpinning)) {
+                render();
+                requestAnimationFrame(renderLoop);
+            } else {
+                render();
+            }
+        }
+
+        function checkAllStopped() {
+            if (reels.every(r => !r.isSpinning)) {
+                isSpinning = false;
+                document.getElementById('ledOuter').classList.remove('spinning');
+                document.getElementById('ledInner').classList.remove('spinning');
+                setTimeout(checkWin, 400);
+            }
+        }
+
+        function checkWin() {
+            const centerSyms = reels.map(r => r.symbols[2]);
+            console.log('Resultado:', centerSyms);
+            
+            const [s1, s2, s3] = centerSyms;
+            let prize = null;
+            
+            if (s1 === s2 && s2 === s3) {
+                switch(s1) {
+                    case '💎':
+                        prize = { type: 'pizza', icon: '💎', title: '¡PIZZA GRATIS!', text: '🍕 Pizza a elección', bigIcon: '🍕', value: 'PIZZA' };
+                        pizzaCount++;
+                        localStorage.setItem('khinallyPizzas', pizzaCount);
+                        document.getElementById('winCount').textContent = pizzaCount + ' 🍕';
+                        
+                        notifyAdmin(`🚨 ¡PIZZA GANADA! 🍕\nTicket: ${currentTicket}`, true);
+                        break;
+                    case '☕':
+                        prize = { type: 'coffee', icon: '☕', title: '¡CAFÉ GRATIS!', text: '☕ Café del día', bigIcon: '☕', value: 'CAFÉ' };
+                        break;
+                    case '⚓':
+                        prize = { type: 'dessert', icon: '⚓', title: '¡POSTRE GRATIS!', text: '🍰 Postre a elección', bigIcon: '🍰', value: 'POSTRE' };
+                        break;
+                    case '🐚':
+                        prize = { type: 'drink', icon: '🐚', title: '¡BEBIDA GRATIS!', text: '🥤 Bebida a elección', bigIcon: '🥤', value: 'BEBIDA' };
+                        break;
+                    case '🐟':
+                        prize = { type: 'keychain', icon: '🐟', title: '¡LLAVERO!', text: '🔑 Llavero de consuelo', bigIcon: '🔑', value: 'LLAVERO' };
+                        break;
+                    default:
+                        prize = { type: 'small', icon: s1, title: '¡SORPRESA!', text: '🎁 Galleta de cortesía', bigIcon: '🎁', value: 'SORPRESA' };
+                }
+            }
+            
+            if (prize) {
+                currentPrize = prize; // Guardar para WhatsApp
+                playSound('win');
+                showWinModal(prize);
+                
+                if (usedTickets[currentTicket]) {
+                    if (!usedTickets[currentTicket].prizes) usedTickets[currentTicket].prizes = [];
+                    usedTickets[currentTicket].prizes.push({
+                        type: prize.type,
+                        icon: prize.icon,
+                        date: new Date().toISOString()
+                    });
+                    localStorage.setItem('khinallyUsedTickets', JSON.stringify(usedTickets));
+                }
+            } else {
+                currentPrize = null;
+                if (remainingSpins === 0) {
+                    setTimeout(showThankYouScreen, 1000);
+                } else {
+                    showMessage('¡Casi! Sigue intentando 🍀');
+                    setTimeout(resetGame, 1500);
+                }
+            }
+        }
+
+        function showWinModal(prize) {
+            document.getElementById('winIcon').textContent = prize.bigIcon;
+            document.getElementById('winTitle').textContent = prize.title;
+            document.getElementById('winText').textContent = prize.text;
+            document.getElementById('winningTicket').textContent = currentTicket;
+            
+            // NUEVO: Mostrar botón de WhatsApp si hay número configurado y es premio importante
+            const whatsappBtn = document.getElementById('whatsappNotifyBtn');
+            if (ownerWhatsApp && prize.value !== 'LLAVERO' && prize.value !== 'SORPRESA') {
+                whatsappBtn.style.display = 'flex';
+                // Preparar mensaje
+                const message = prepareWhatsAppMessage(prize);
+                whatsappBtn.href = `https://wa.me/${ownerWhatsApp}?text=${encodeURIComponent(message)}`;
+            } else {
+                whatsappBtn.style.display = 'none';
+            }
+            
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('winMessage').classList.add('show');
+            createConfetti();
+        }
+
+        // NUEVO: Preparar mensaje de WhatsApp
+        function prepareWhatsAppMessage(prize) {
+            const now = new Date();
+            const fecha = now.toLocaleDateString('es-CO');
+            const hora = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+            
+            return `🎰 *CAFÉ KHINALLY - PREMIO GANADO* 🎰
+
+🏆 *Premio:* ${prize.value}
+🎫 *Ticket:* ${currentTicket}
+👤 *Cliente:* ${usedTickets[currentTicket] ? 'Cliente' : 'N/A'}
+⏰ *Hora:* ${hora} - ${fecha}
+
+⚠️ *¡Reclamar en caja!*
+
+_Enviado desde la Traga-Marina_ 🌊`;
+        }
+
+        // NUEVO: Enviar notificación WhatsApp
+        function sendWhatsAppNotification(event) {
+            event.preventDefault();
+            
+            if (!ownerWhatsApp) {
+                alert('⚠️ No hay número de WhatsApp configurado. Contacta al personal.');
+                return;
+            }
+            
+            if (!currentPrize) return;
+            
+            const message = prepareWhatsAppMessage(currentPrize);
+            const whatsappURL = `https://wa.me/${ownerWhatsApp}?text=${encodeURIComponent(message)}`;
+            
+            // Abrir WhatsApp en nueva ventana
+            window.open(whatsappURL, '_blank');
+            
+            // Feedback visual
+            const btn = document.getElementById('whatsappNotifyBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Notificación Enviada';
+            btn.style.background = '#128C7E';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 3000);
+        }
+
+        function closeWin() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('winMessage').classList.remove('show');
+            currentPrize = null;
+            
+            if (remainingSpins === 0) {
+                showThankYouScreen();
+            } else {
+                resetGame();
+            }
+        }
+
+        function showThankYouScreen() {
+            document.getElementById('thankYouScreen').classList.add('show');
+            document.getElementById('machineContainer').classList.add('blocked');
+            document.getElementById('prizesBoard').style.opacity = '0.3';
+        }
+
+        function resetToQrMode() {
+            document.getElementById('thankYouScreen').classList.remove('show');
+            
+            currentTicket = null;
+            remainingSpins = 0;
+            isBonusSpin = false;
+            currentPrize = null;
+            
+            document.getElementById('waitingQr').style.display = 'block';
+            document.getElementById('machineContainer').style.display = 'none';
+            document.getElementById('prizesBoard').style.display = 'none';
+            document.getElementById('prizesBoard').style.opacity = '1';
+            document.getElementById('machineContainer').classList.remove('blocked');
+            document.getElementById('bonusInfo').classList.remove('active');
+            document.getElementById('spinsCounter').classList.remove('active');
+            document.getElementById('spinBtn').disabled = true;
+            
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        function resetGame() {
+            document.getElementById('spinBtn').disabled = remainingSpins <= 0;
+        }
+
+        function showMessage(text) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+                background: rgba(0,31,63,0.95); color: #ffd700; padding: 15px 30px;
+                border-radius: 30px; font-family: 'Fredoka One', cursive; font-size: 1.1em;
+                border: 2px solid #ffd700; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                z-index: 1001; animation: slideDown 0.5s ease;
+            `;
+            toast.textContent = text;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 1800);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const c = document.createElement('div');
+                c.style.cssText = `
+                    position: fixed; width: 10px; height: 10px;
+                    background: ${['#ffd700', '#ff6b6b', '#4ecdc4', '#ffe66d', '#ff0000'][Math.floor(Math.random()*5)]};
+                    left: ${Math.random() * 100}vw; top: -10px; border-radius: 50%;
+                    animation: fall ${2 + Math.random() * 2}s linear; z-index: 1002;
+                `;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown { from { transform: translateX(-50%) translateY(-100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+            @keyframes slideUp { from { transform: translateX(-50%) translateY(0); opacity: 1; } to { transform: translateX(-50%) translateY(-100px); opacity: 0; } }
+            @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+        `;
+        document.head.appendChild(style);
+
+        initReels();
+        render();
+    </script>
+</body>
+</html>
